@@ -1,4 +1,4 @@
-
+/* global AFRAME, THREE */
 AFRAME.registerComponent('transient-input-handler', {
     init: function () {
         console.log("transient-input-handler init");

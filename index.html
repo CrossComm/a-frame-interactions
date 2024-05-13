@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CrossComm</title>
+    <meta name="description" content="Hello, WebVR! � A-Frame" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
+    <script src="components/interaction/transient-input-handler.js"></script>
+  </head>
+  <body>
+    <a-scene
+      shadow="autoUpdate: true; type: pcfsoft ; enabled: true;"
+      id="scene-root"
+      renderer="antialias: true; sortObjects: true; colorManagement: true; physicallyCorrectLights: true;"
+      transient-input-handler
+    >        
+        <a-assets> 
+        <img id="cc-icon" src="assets/icons/logo.png"></img>
+        </a-assets>
+      
+      //XR Rig
+      <a-entity id="rig">
+        //Camera controls for 2d screens
+        <a-camera
+          id = "mainCamera"
+          look-controls="pointerLockEnabled: false"
+          wasd-controls
+          position="0.3 1.5 -.6"
+          rotation="0 180 0"
+        >
+            <a-entity
+            id="cursor"
+            cursor="rayOrigin: mouse; fuse: false; fuseTimeout: 500"
+            >
+        </a-camera>        
+        //Hand tracking controls
+        <a-entity
+          id="hand-tracking-left"
+          hand-tracking-controls="hand: left; modelColor: #89b7d7"
+          hand-tracking-extras 
+        ></a-entity>
+        <a-entity
+          id="hand-tracking-right"
+          hand-tracking-controls="hand: right; modelColor: #89b7d7"
+          hand-tracking-extras
+        ></a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>

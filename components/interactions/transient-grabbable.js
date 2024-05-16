@@ -19,7 +19,7 @@ AFRAME.registerComponent('transient-grabbable', {
     console.log("grabbable onInteractStart: " + this.el.id);
     this.grabStartPose = event.detail.pose;
     this.el.object3D.userData.initialPosition = this.el.object3D.position.clone();
-    this.el.object3D.userData.initialRotation = this.el.object3D.rotation.clone();
+    this.el.object3D.userData.initialRotation = this.el.object3D.quaternion.clone();
   },
 
   onMove: function (event) {
@@ -43,10 +43,30 @@ AFRAME.registerComponent('transient-grabbable', {
 
     // Update object's position
     this.el.object3D.position.copy(this.el.object3D.userData.initialPosition).add(deltaPosition);
+
+    // Extract rotations from the initial and current poses
+    const startRotation = new THREE.Quaternion(
+      this.grabStartPose.transform.orientation.x,
+      this.grabStartPose.transform.orientation.y,
+      this.grabStartPose.transform.orientation.z,
+      this.grabStartPose.transform.orientation.w
+    );
+    const currentRotation = new THREE.Quaternion(
+      currentPose.transform.orientation.x,
+      currentPose.transform.orientation.y,
+      currentPose.transform.orientation.z,
+      currentPose.transform.orientation.w
+    );
+
+    // Calculate delta rotation
+    const deltaRotation = new THREE.Quaternion().multiplyQuaternions(currentRotation, startRotation.inverse());
+
+    // Update object's rotation
+    this.el.object3D.quaternion.copy(this.el.object3D.userData.initialRotation).multiply(deltaRotation);
   },
 
-  onRelease: function (event) {
+  onRelease: function () {
     console.log("grabbable onInteractEnd: " + this.el.id);
-    this.grabStartPose = null;  // Reset grab start pose
+    this.grabStartPose = null; // Reset grab start pose
   }
 });

@@ -4,9 +4,9 @@ AFRAME.registerComponent('transient-grabbable', {
     console.log("grabbable init: " + this.el.id);
     this.bindMethods();
     this.grabStartPose = null;
-    this.el.addEventListener('onInteractStart', this.onGrab.bind(this));
-    this.el.addEventListener('onInteract', this.onMove.bind(this));
-    this.el.addEventListener('onInteractEnd', this.onRelease.bind(this));
+    this.el.addEventListener('onInteractStart', this.onGrab);
+    this.el.addEventListener('onInteract', this.onMove);
+    this.el.addEventListener('onInteractEnd', this.onRelease);
   },
 
   bindMethods: function () {
@@ -24,20 +24,29 @@ AFRAME.registerComponent('transient-grabbable', {
 
   onMove: function (event) {
     const currentPose = event.detail.pose;
+    if (!this.grabStartPose) return;
+
     // Extract positions from the initial and current poses
-    const startPosition = new THREE.Vector3(this.grabStartPose.transform.position.x, this.grabStartPose.transform.position.y, this.grabStartPose.transform.position.z);
-    const currentPosition = new THREE.Vector3(currentPose.transform.position.x, currentPose.transform.position.y, currentPose.transform.position.z);
+    const startPosition = new THREE.Vector3(
+      this.grabStartPose.transform.position.x,
+      this.grabStartPose.transform.position.y,
+      this.grabStartPose.transform.position.z
+    );
+    const currentPosition = new THREE.Vector3(
+      currentPose.transform.position.x,
+      currentPose.transform.position.y,
+      currentPose.transform.position.z
+    );
 
     // Calculate delta position
     const deltaPosition = new THREE.Vector3().subVectors(currentPosition, startPosition);
-    
+
     // Update object's position
-    this.el.object3D.position.copy(startPosition).add(deltaPosition);
-
-    },
-
+    this.el.object3D.position.copy(this.el.object3D.userData.initialPosition).add(deltaPosition);
+  },
 
   onRelease: function (event) {
     console.log("grabbable onInteractEnd: " + this.el.id);
+    this.grabStartPose = null;  // Reset grab start pose
   }
 });

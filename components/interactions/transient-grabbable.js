@@ -59,7 +59,7 @@ AFRAME.registerComponent('transient-grabbable', {
     );
 
     // Calculate delta rotation
-    const deltaRotation = new THREE.Quaternion().multiplyQuaternions(currentRotation, startRotation.inverse());
+    const deltaRotation = new THREE.Quaternion().copy(currentRotation).multiply(startRotation.invert());
 
     // Update object's rotation
     this.el.object3D.quaternion.copy(this.el.object3D.userData.initialRotation).multiply(deltaRotation);

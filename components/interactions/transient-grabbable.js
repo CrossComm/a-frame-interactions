@@ -19,7 +19,7 @@ AFRAME.registerComponent('transient-grabbable', {
     console.log("grabbable onInteractStart: " + this.el.id);
     this.grabStartPose = event.detail.pose;
     this.el.object3D.userData.initialPosition = this.el.object3D.position.clone();
-    this.el.object3D.userData.initialRotation = this.el.object3D.quaternion.clone();
+    this.el.object3D.userData.initialQuaternion = this.el.object3D.quaternion.clone();
   },
 
   onMove: function (event) {
@@ -61,8 +61,11 @@ AFRAME.registerComponent('transient-grabbable', {
     // Calculate delta rotation
     const deltaRotation = new THREE.Quaternion().multiplyQuaternions(currentRotation, startRotation.clone().invert());
 
+    // Apply delta rotation to initial rotation
+    const newRotation = new THREE.Quaternion().multiplyQuaternions(deltaRotation, this.el.object3D.userData.initialQuaternion);
+
     // Update object's rotation
-    this.el.object3D.quaternion.copy(this.el.object3D.userData.initialRotation).multiply(deltaRotation);
+    this.el.object3D.quaternion.copy(newRotation);
   },
 
   onRelease: function () {

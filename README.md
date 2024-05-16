@@ -52,5 +52,10 @@ Sample code is at [Sample HTML](https://github.com/CrossComm/a-frame-interaction
 * The logo listens to a ```click``` event and triggers an animation when gazed at and pinched
 * The cube has transient-grabbable which allows us to gaze, pinch and move the cube around
 
+## Future Plans
+* Add grabbing with 2 hands simulataneously (this component currently only works with one hand at a time)
+* Add options to grabbable to enable physics
+* Make same component usable with other devices
+
 ##License
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/CrossComm/a-frame-interactions/blob/main/LICENSE) file for details.
